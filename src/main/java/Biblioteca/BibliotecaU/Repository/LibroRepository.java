@@ -1,6 +1,6 @@
 package Biblioteca.BibliotecaU.Repository;
 
-import Biblioteca.BibliotecaU.entity.Libro;
+import Biblioteca.BibliotecaU.Entity.Libro;
 import jakarta.persistence.LockModeType;
 import jakarta.persistence.QueryHint;
 import org.springframework.data.jpa.repository.JpaRepository;
