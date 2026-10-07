@@ -91,15 +91,21 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ApiError> cuerpoIlegible(HttpMessageNotReadableException ex, HttpServletRequest req) {
 
-        log.error("ERROR AL LEER EL JSON en {}", req.getRequestURI(), ex);
-
         String detalle = ex.getMostSpecificCause() != null
                 ? ex.getMostSpecificCause().getMessage()
                 : ex.getMessage();
 
+        boolean esUtf8 = detalle != null && detalle.contains("Invalid UTF-8");
+
+        // Una sola línea de log, sin stack trace: es un error del cliente, no del servidor
+        log.warn("JSON ilegible en {}: {}", req.getRequestURI(),
+                esUtf8 ? "codificación inválida (se esperaba UTF-8)" : "formato inválido");
+
         return respuesta(
                 HttpStatus.BAD_REQUEST,
-                "Error al leer el JSON: " + detalle,
+                esUtf8
+                        ? "El cuerpo de la petición debe estar codificado en UTF-8"
+                        : "El cuerpo de la petición no es un JSON válido",
                 req
         );
     }
