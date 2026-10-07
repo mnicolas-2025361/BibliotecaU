@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: BibliotecaU
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/BibliotecaU
+    username: postgres
+    password: admin
+    hikari:
+      maximum-pool-size: 30
+      minimum-idle: 10
+      connection-timeout: 30000
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    show-sql: false
+
+server:
+  port: 8001
+
+app:
+  jwt:
+    secret: "cambia-esta-clave-por-una-de-minimo-32-caracteres-BibliotecaU-2026"
+    expiration-ms: 3600000
