@@ -11,5 +11,6 @@ public record LibroRequest(
         @NotBlank @Size(max = 150) String autor,
         @Size(max = 80) String categoria,
         @Size(max = 120) String editorial,
-        @NotNull @Min(0) Integer stockTotal
+        @NotNull @Min(0) Integer stockTotal,
+        @NotNull @Min(0) Integer stockDisponible
 ) {}

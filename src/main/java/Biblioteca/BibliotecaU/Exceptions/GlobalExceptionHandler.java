@@ -90,7 +90,18 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ApiError> cuerpoIlegible(HttpMessageNotReadableException ex, HttpServletRequest req) {
-        return respuesta(HttpStatus.BAD_REQUEST, "El cuerpo de la petición es inválido o está mal formado", req);
+
+        log.error("ERROR AL LEER EL JSON en {}", req.getRequestURI(), ex);
+
+        String detalle = ex.getMostSpecificCause() != null
+                ? ex.getMostSpecificCause().getMessage()
+                : ex.getMessage();
+
+        return respuesta(
+                HttpStatus.BAD_REQUEST,
+                "Error al leer el JSON: " + detalle,
+                req
+        );
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
