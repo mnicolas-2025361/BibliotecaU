@@ -43,8 +43,9 @@ public class LibroService {
     @Transactional
     public LibroResponse crear(LibroRequest r) {
         String isbn = r.isbn().trim();
-        if (libroRepository.existsByIsbn(isbn)) {
-            throw new RecursoDuplicadoException("Ya existe un libro con el ISBN " + isbn);
+        if (r.stockDisponible() > r.stockTotal()) {
+            throw new ReglaNegocioException(
+                    "El stock disponible no puede ser mayor que el stock total");
         }
 
         Libro libro = Libro.builder()
@@ -54,7 +55,7 @@ public class LibroService {
                 .categoria(r.categoria())
                 .editorial(r.editorial())
                 .stockTotal(r.stockTotal())
-                .stockDisponible(r.stockTotal())
+                .stockDisponible(r.stockDisponible())
                 .build();
 
         return LibroResponse.from(libroRepository.save(libro));
